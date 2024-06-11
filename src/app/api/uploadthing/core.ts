@@ -18,8 +18,11 @@ const middleware = async () => {
     throw new Error('Unauthorized');
   }
 
+  console.log("User found")
+
   const subscriptionPlan = await getUserSubscriptionPlan();
 
+  console.log("User returned")
   return { subscriptionPlan, userId: user.id };
 };
 
@@ -34,6 +37,7 @@ const onUploadComplete = async ({
     url: string;
   };
 }) => {
+  console.log("Inside onUploadComplete")
   const isFileExist = await db.file.findFirst({
     where: {
       key: file.key,
@@ -44,6 +48,7 @@ const onUploadComplete = async ({
     return;
   }
 
+  console.log("File does not exist, uploading new to upload thing")
   const createdFile = await db.file.create({
     data: {
       key: file.key,
@@ -53,6 +58,8 @@ const onUploadComplete = async ({
       uploadStatus: 'PROCESSING',
     },
   });
+
+  console.log("File uploaded to upload thing", createdFile.id)
 
   try {
     const response = await fetch(`https://utfs.io/f/${file.key}`);

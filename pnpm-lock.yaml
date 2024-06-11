@@ -78,7 +78,7 @@ importers:
         specifier: 18.2.7
         version: 18.2.7
       '@uploadthing/react':
-        specifier: ^5.7.0
+        specifier: ^5.6.1
         version: 5.7.0(@uploadthing/mime-types@0.2.10)(next@13.5.2(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react@18.2.0)(uploadthing@5.7.4)
       ai:
         specifier: ^2.2.13
@@ -171,7 +171,7 @@ importers:
         specifier: 5.2.2
         version: 5.2.2
       uploadthing:
-        specifier: ^5.7.4
+        specifier: ^5.6.1
         version: 5.7.4
       zod:
         specifier: ^3.21.4
@@ -3548,24 +3548,6 @@ snapshots:
       camelcase: 6.3.0
       decamelize: 1.2.0
       js-tiktoken: 1.0.12
-      langsmith: 0.1.30(@langchain/core@0.2.6(langchain@0.0.153(@pinecone-database/pinecone@2.2.2)(@supabase/postgrest-js@1.15.2)(@supabase/supabase-js@2.43.4)(encoding@0.1.13)(ignore@5.2.4)(pdf-parse@1.1.1))(openai@4.10.0(encoding@0.1.13)))(langchain@0.0.153(@pinecone-database/pinecone@2.2.2)(@supabase/postgrest-js@1.15.2)(@supabase/supabase-js@2.43.4)(encoding@0.1.13)(ignore@5.2.4)(pdf-parse@1.1.1))(openai@4.10.0(encoding@0.1.13))
-      ml-distance: 4.0.1
-      mustache: 4.2.0
-      p-queue: 6.6.2
-      p-retry: 4.6.2
-      uuid: 9.0.1
-      zod: 3.23.8
-      zod-to-json-schema: 3.23.0(zod@3.23.8)
-    transitivePeerDependencies:
-      - langchain
-      - openai
-
-  '@langchain/core@0.2.6(langchain@0.0.153(@pinecone-database/pinecone@2.2.2)(@supabase/postgrest-js@1.15.2)(@supabase/supabase-js@2.43.4)(encoding@0.1.13)(ignore@5.2.4)(pdf-parse@1.1.1))(openai@4.49.1(encoding@0.1.13))':
-    dependencies:
-      ansi-styles: 5.2.0
-      camelcase: 6.3.0
-      decamelize: 1.2.0
-      js-tiktoken: 1.0.12
       langsmith: 0.1.30(@langchain/core@0.2.6(langchain@0.0.153(@pinecone-database/pinecone@2.2.2)(@supabase/postgrest-js@1.15.2)(@supabase/supabase-js@2.43.4)(encoding@0.1.13)(ignore@5.2.4)(pdf-parse@1.1.1))(openai@4.49.1(encoding@0.1.13)))(langchain@0.0.153(@pinecone-database/pinecone@2.2.2)(@supabase/postgrest-js@1.15.2)(@supabase/supabase-js@2.43.4)(encoding@0.1.13)(ignore@5.2.4)(pdf-parse@1.1.1))(openai@4.49.1(encoding@0.1.13))
       ml-distance: 4.0.1
       mustache: 4.2.0
@@ -3580,7 +3562,7 @@ snapshots:
 
   '@langchain/openai@0.1.2(encoding@0.1.13)(langchain@0.0.153(@pinecone-database/pinecone@2.2.2)(@supabase/postgrest-js@1.15.2)(@supabase/supabase-js@2.43.4)(encoding@0.1.13)(ignore@5.2.4)(pdf-parse@1.1.1))':
     dependencies:
-      '@langchain/core': 0.2.6(langchain@0.0.153(@pinecone-database/pinecone@2.2.2)(@supabase/postgrest-js@1.15.2)(@supabase/supabase-js@2.43.4)(encoding@0.1.13)(ignore@5.2.4)(pdf-parse@1.1.1))(openai@4.49.1(encoding@0.1.13))
+      '@langchain/core': 0.2.6(langchain@0.0.153(@pinecone-database/pinecone@2.2.2)(@supabase/postgrest-js@1.15.2)(@supabase/supabase-js@2.43.4)(encoding@0.1.13)(ignore@5.2.4)(pdf-parse@1.1.1))(openai@4.10.0(encoding@0.1.13))
       js-tiktoken: 1.0.12
       openai: 4.49.1(encoding@0.1.13)
       zod: 3.23.8
@@ -5501,18 +5483,6 @@ snapshots:
       p-retry: 4.6.2
       uuid: 9.0.1
 
-  langsmith@0.1.30(@langchain/core@0.2.6(langchain@0.0.153(@pinecone-database/pinecone@2.2.2)(@supabase/postgrest-js@1.15.2)(@supabase/supabase-js@2.43.4)(encoding@0.1.13)(ignore@5.2.4)(pdf-parse@1.1.1))(openai@4.10.0(encoding@0.1.13)))(langchain@0.0.153(@pinecone-database/pinecone@2.2.2)(@supabase/postgrest-js@1.15.2)(@supabase/supabase-js@2.43.4)(encoding@0.1.13)(ignore@5.2.4)(pdf-parse@1.1.1))(openai@4.10.0(encoding@0.1.13)):
-    dependencies:
-      '@types/uuid': 9.0.4
-      commander: 10.0.1
-      p-queue: 6.6.2
-      p-retry: 4.6.2
-      uuid: 9.0.1
-    optionalDependencies:
-      '@langchain/core': 0.2.6(langchain@0.0.153(@pinecone-database/pinecone@2.2.2)(@supabase/postgrest-js@1.15.2)(@supabase/supabase-js@2.43.4)(encoding@0.1.13)(ignore@5.2.4)(pdf-parse@1.1.1))(openai@4.10.0(encoding@0.1.13))
-      langchain: 0.0.153(@pinecone-database/pinecone@2.2.2)(@supabase/postgrest-js@1.15.2)(@supabase/supabase-js@2.43.4)(encoding@0.1.13)(ignore@5.2.4)(pdf-parse@1.1.1)
-      openai: 4.10.0(encoding@0.1.13)
-
   langsmith@0.1.30(@langchain/core@0.2.6(langchain@0.0.153(@pinecone-database/pinecone@2.2.2)(@supabase/postgrest-js@1.15.2)(@supabase/supabase-js@2.43.4)(encoding@0.1.13)(ignore@5.2.4)(pdf-parse@1.1.1))(openai@4.49.1(encoding@0.1.13)))(langchain@0.0.153(@pinecone-database/pinecone@2.2.2)(@supabase/postgrest-js@1.15.2)(@supabase/supabase-js@2.43.4)(encoding@0.1.13)(ignore@5.2.4)(pdf-parse@1.1.1))(openai@4.49.1(encoding@0.1.13)):
     dependencies:
       '@types/uuid': 9.0.4
@@ -5521,7 +5491,7 @@ snapshots:
       p-retry: 4.6.2
       uuid: 9.0.1
     optionalDependencies:
-      '@langchain/core': 0.2.6(langchain@0.0.153(@pinecone-database/pinecone@2.2.2)(@supabase/postgrest-js@1.15.2)(@supabase/supabase-js@2.43.4)(encoding@0.1.13)(ignore@5.2.4)(pdf-parse@1.1.1))(openai@4.49.1(encoding@0.1.13))
+      '@langchain/core': 0.2.6(langchain@0.0.153(@pinecone-database/pinecone@2.2.2)(@supabase/postgrest-js@1.15.2)(@supabase/supabase-js@2.43.4)(encoding@0.1.13)(ignore@5.2.4)(pdf-parse@1.1.1))(openai@4.10.0(encoding@0.1.13))
       langchain: 0.0.153(@pinecone-database/pinecone@2.2.2)(@supabase/postgrest-js@1.15.2)(@supabase/supabase-js@2.43.4)(encoding@0.1.13)(ignore@5.2.4)(pdf-parse@1.1.1)
       openai: 4.49.1(encoding@0.1.13)
 
