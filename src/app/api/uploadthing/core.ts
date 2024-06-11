@@ -82,23 +82,17 @@ const onUploadComplete = async ({
     }
     
     const client = new Pinecone({
-      apiKey: '144a82de-339e-413d-b5b5-42034a0682c2',
+      apiKey: process.env.PINECONE_API_KEY!,
     });
     const pineconeIndex = client.Index('pdf');
-    console.log('Initializing Pinecone client...');
-    console.log('Pinecone index:');
 
     const embeddings = new OpenAIEmbeddings({
       openAIApiKey: process.env.OPENAI_API_KEY,
     });
-    console.log("Embeddings!")
-    // await PineconeStore.fromDocuments(pageLevelDocs, embeddings, {
-    //   pineconeIndex,
-    // });
+
     await PineconeStore.fromDocuments(pageLevelDocs, embeddings, {
       pineconeIndex,
     });
-    console.log("pincone store!")
 
     await db.file.update({
       data: {
@@ -121,10 +115,10 @@ const onUploadComplete = async ({
 };
 
 export const ourFileRouter = {
-  freePlanUploader: f({ pdf: { maxFileSize: '4MB' } })
+  freePlanUploader: f({ pdf: { maxFileSize: '128MB' } })
     .middleware(middleware)
     .onUploadComplete(onUploadComplete),
-  proPlanUploader: f({ pdf: { maxFileSize: '16MB' } })
+  proPlanUploader: f({ pdf: { maxFileSize: '512MB' } })
     .middleware(middleware)
     .onUploadComplete(onUploadComplete),
 } satisfies FileRouter;

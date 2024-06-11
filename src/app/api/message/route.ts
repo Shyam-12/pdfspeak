@@ -43,11 +43,9 @@ export const POST = async (req: NextRequest) => {
 
   // Vectorize message
   const client = new Pinecone({
-    apiKey: '144a82de-339e-413d-b5b5-42034a0682c2',
+    apiKey: process.env.PINECONE_API_KEY!,
   });
   const pineconeIndex = client.Index('pdf');
-  console.log('Initializing Pinecone client...');
-  console.log('Pinecone index: inside message');
 
   const embeddings = new OpenAIEmbeddings({
     openAIApiKey: process.env.OPENAI_API_KEY,
@@ -57,11 +55,7 @@ export const POST = async (req: NextRequest) => {
     pineconeIndex,
   });
 
-  console.log("Vector store created")
-
   const results = await vectorStore.similaritySearch(message, 4);
-
-  console.log("Results generated")
 
   const prevMessages = await db.message.findMany({
     where: {
