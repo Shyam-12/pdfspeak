@@ -29,10 +29,13 @@ const UploadDropzone = ({
     useState<number>(0)
   const { toast } = useToast()
 
+  console.log("Inside UploadDropzone")
+  console.log("Starting upload")
   const { startUpload } = useUploadThing(
     isSubscribed ? 'proPlanUploader' : 'freePlanUploader'
   )
 
+  console.log(startUpload)
   const { mutate: startPolling } = trpc.getFile.useMutation(
     {
       onSuccess: (file) => {
@@ -65,6 +68,7 @@ const UploadDropzone = ({
       onDrop={async (acceptedFile) => {
         setIsUploading(true)
 
+        console.log("File uploading started")
         const progressInterval = startSimulatedProgress()
 
         // handle file uploading
