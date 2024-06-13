@@ -5,7 +5,6 @@ import { PDFLoader } from 'langchain/document_loaders/fs/pdf';
 import { OpenAIEmbeddings } from "@langchain/openai";
 import { PineconeStore } from "@langchain/pinecone";
 import { Pinecone } from '@pinecone-database/pinecone';
-import { getUserSubscriptionPlan } from '@/lib/stripe';
 import { PLANS } from '@/config/stripe';
 
 const f = createUploadthing();
@@ -18,12 +17,7 @@ const middleware = async () => {
     throw new Error('Unauthorized');
   }
 
-  console.log("User found");
-
-  const subscriptionPlan = await getUserSubscriptionPlan();
-
-  console.log("User returned");
-  return { subscriptionPlan, userId: user.id };
+  return { userId: user.id };
 };
 
 const onUploadComplete = async ({
@@ -37,7 +31,6 @@ const onUploadComplete = async ({
     url: string;
   };
 }) => {
-  console.log("Inside onUploadComplete");
   const isFileExist = await db.file.findFirst({
     where: {
       key: file.key,
@@ -48,7 +41,6 @@ const onUploadComplete = async ({
     return;
   }
 
-  console.log("File does not exist, uploading new to upload thing");
   const createdFile = await db.file.create({
     data: {
       key: file.key,
@@ -59,8 +51,6 @@ const onUploadComplete = async ({
     },
   });
 
-  console.log("File uploaded to upload thing", createdFile.id);
-
   try {
     const response = await fetch(`https://utfs.io/f/${file.key}`);
     const blob = await response.blob();
@@ -69,13 +59,9 @@ const onUploadComplete = async ({
     const pageLevelDocs = await loader.load();
     const pagesAmt = pageLevelDocs.length;
 
-    const { subscriptionPlan } = metadata;
-    const { isSubscribed } = subscriptionPlan;
-
-    const isProExceeded = pagesAmt > PLANS.find(plan => plan.name === 'Pro')!.pagesPerPdf;
     const isFreeExceeded = pagesAmt > PLANS.find(plan => plan.name === 'Free')!.pagesPerPdf;
 
-    if ((isSubscribed && isProExceeded) || (!isSubscribed && isFreeExceeded)) {
+    if (isFreeExceeded) {
       await db.file.update({
         data: {
           uploadStatus: 'FAILED',
@@ -96,11 +82,7 @@ const onUploadComplete = async ({
     const embeddings = new OpenAIEmbeddings({
       openAIApiKey: process.env.OPENAI_API_KEY,
     });
-    console.log("Embeddings created", embeddings)
 
-    console.log("Page level docs", pageLevelDocs)
-
-    console.log("created file id", createdFile.id);
     await PineconeStore.fromDocuments(pageLevelDocs, embeddings, {
       pineconeIndex,
       namespace: `${createdFile.id}`,
