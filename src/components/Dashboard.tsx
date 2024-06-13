@@ -15,14 +15,9 @@ import { format } from 'date-fns'
 import { Button } from './ui/button'
 import { useState } from 'react'
 import Image from 'next/image'
-import { getUserSubscriptionPlan } from '@/lib/stripe'
 import { Toaster, toast } from 'react-hot-toast'
 
-interface PageProps {
-  subscriptionPlan: Awaited<ReturnType<typeof getUserSubscriptionPlan>>
-}
-
-const Dashboard = ({ subscriptionPlan }: PageProps) => {
+const Dashboard = () => {
   const [currentlyDeletingFile, setCurrentlyDeletingFile] =
     useState<string | null>(null)
 
@@ -86,7 +81,7 @@ const Dashboard = ({ subscriptionPlan }: PageProps) => {
           My Files
         </h1>
 
-        <UploadButton isSubscribed={subscriptionPlan.isSubscribed} />
+        <UploadButton />
       </div>
 
       {/* display all user files */}
