@@ -14,13 +14,15 @@ import Link from 'next/link'
 import { format } from 'date-fns'
 import { Button } from './ui/button'
 import { useState } from 'react'
+import Image from 'next/image'
 import { getUserSubscriptionPlan } from '@/lib/stripe'
+import { Toaster, toast } from 'react-hot-toast'
 
 interface PageProps {
   subscriptionPlan: Awaited<ReturnType<typeof getUserSubscriptionPlan>>
 }
 
-const Dashboard = ({subscriptionPlan}: PageProps) => {
+const Dashboard = ({ subscriptionPlan }: PageProps) => {
   const [currentlyDeletingFile, setCurrentlyDeletingFile] =
     useState<string | null>(null)
 
@@ -42,8 +44,43 @@ const Dashboard = ({subscriptionPlan}: PageProps) => {
       },
     })
 
+  const handleShare = async (fileId: any) => {
+    const fileUrl = `http://localhost:3000/dashboard/${fileId}`;
+    try {
+      if (navigator.share) {
+        await navigator.share({
+          title: 'Share File Link',
+          text: 'Check out this file!',
+          url: fileUrl// Replace with your actual file URL
+        });
+      } else {
+        throw new Error('Web Share API is not supported in this browser.');
+      }
+    } catch (error) {
+      console.error('Error sharing:', error);
+      try {
+        const tempInput = document.createElement('input');
+        tempInput.value = fileUrl;
+        document.body.appendChild(tempInput);
+        tempInput.select();
+        tempInput.setSelectionRange(0, 99999); // For mobile devices
+        document.execCommand('copy');
+        document.body.removeChild(tempInput);
+        // Show a success message or perform any other UI feedback
+        toast.success('File link copied to clipboard!')
+      } catch (clipboardError) {
+        console.error('Error copying link to clipboard:', clipboardError);
+        // Handle any errors from clipboard copying
+        toast.error('Failed to copy file link to clipboard. Please copy it manually.')
+      }
+    }
+  };
+
+
+
   return (
     <main className='mx-auto max-w-7xl md:p-10'>
+      <Toaster/>
       <div className='mt-8 flex flex-col items-start justify-between gap-4 border-b border-gray-200 pb-5 sm:flex-row sm:items-center sm:gap-0'>
         <h1 className='mb-3 font-bold text-5xl text-gray-900'>
           My Files
@@ -94,19 +131,28 @@ const Dashboard = ({subscriptionPlan}: PageProps) => {
                     mocked
                   </div>
 
-                  <Button
-                    onClick={() =>
-                      deleteFile({ id: file.id })
-                    }
-                    size='sm'
-                    className='w-full'
-                    variant='destructive'>
-                    {currentlyDeletingFile === file.id ? (
-                      <Loader2 className='h-4 w-4 animate-spin' />
-                    ) : (
-                      <Trash className='h-4 w-4' />
-                    )}
-                  </Button>
+                  <div className="flex gap-5">
+                    <Button
+                      onClick={() =>
+                        deleteFile({ id: file.id })
+                      }
+                      size='sm'
+                      className='w-full'
+                      variant='destructive'>
+                      {currentlyDeletingFile === file.id ? (
+                        <Loader2 className='h-4 w-4 animate-spin' />
+                      ) : (
+                        <Trash className='h-4 w-4' />
+                      )}
+                    </Button>
+                    <Button
+                      onClick={() => handleShare(file.id)}
+                      size='sm'
+                      className='w-full'
+                      variant='destructive'>
+                      <Image src="/share.png" alt='' width={10} height={10} />
+                    </Button>
+                  </div>
                 </div>
               </li>
             ))}

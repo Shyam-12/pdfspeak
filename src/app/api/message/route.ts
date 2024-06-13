@@ -41,11 +41,10 @@ export const POST = async (req: NextRequest) => {
     },
   });
 
-  // Vectorize message
   const client = new Pinecone({
     apiKey: process.env.PINECONE_API_KEY!,
   });
-  const pineconeIndex = client.Index('pdf');
+  const pineconeIndex = client.Index('pdfspeak');
 
   const embeddings = new OpenAIEmbeddings({
     openAIApiKey: process.env.OPENAI_API_KEY,
@@ -53,6 +52,7 @@ export const POST = async (req: NextRequest) => {
 
   const vectorStore = await PineconeStore.fromExistingIndex(embeddings, {
     pineconeIndex,
+    namespace: `${fileId}`,
   });
 
   const results = await vectorStore.similaritySearch(message, 4);
@@ -79,12 +79,11 @@ export const POST = async (req: NextRequest) => {
     messages: [
       {
         role: 'system',
-        content:
-          'Use the following pieces of context (or previous conversaton if needed) to answer the users question in markdown format.',
+        content: 'Use the following pieces of context (or previous conversation if needed) to answer the user\'s question in markdown format.',
       },
       {
         role: 'user',
-        content: `Use the following pieces of context (or previous conversaton if needed) to answer the users question in markdown format. \nIf you don't know the answer, just say that you don't know, don't try to make up an answer.
+        content: `Use the following pieces of context (or previous conversation if needed) to answer the user\'s question in markdown format. \nIf you don't know the answer, just say that you don't know, don't try to make up an answer.
         
   \n----------------\n
   
@@ -92,7 +91,7 @@ export const POST = async (req: NextRequest) => {
   ${formattedPrevMessages.map(message => {
     if (message.role === 'user') return `User: ${message.content}\n`;
     return `Assistant: ${message.content}\n`;
-  })}
+  }).join('\n')}
   
   \n----------------\n
   

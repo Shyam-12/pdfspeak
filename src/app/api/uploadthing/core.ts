@@ -18,11 +18,11 @@ const middleware = async () => {
     throw new Error('Unauthorized');
   }
 
-  console.log("User found")
+  console.log("User found");
 
   const subscriptionPlan = await getUserSubscriptionPlan();
 
-  console.log("User returned")
+  console.log("User returned");
   return { subscriptionPlan, userId: user.id };
 };
 
@@ -37,7 +37,7 @@ const onUploadComplete = async ({
     url: string;
   };
 }) => {
-  console.log("Inside onUploadComplete")
+  console.log("Inside onUploadComplete");
   const isFileExist = await db.file.findFirst({
     where: {
       key: file.key,
@@ -48,7 +48,7 @@ const onUploadComplete = async ({
     return;
   }
 
-  console.log("File does not exist, uploading new to upload thing")
+  console.log("File does not exist, uploading new to upload thing");
   const createdFile = await db.file.create({
     data: {
       key: file.key,
@@ -59,16 +59,14 @@ const onUploadComplete = async ({
     },
   });
 
-  console.log("File uploaded to upload thing", createdFile.id)
+  console.log("File uploaded to upload thing", createdFile.id);
 
   try {
     const response = await fetch(`https://utfs.io/f/${file.key}`);
     const blob = await response.blob();
 
     const loader = new PDFLoader(blob);
-
     const pageLevelDocs = await loader.load();
-
     const pagesAmt = pageLevelDocs.length;
 
     const { subscriptionPlan } = metadata;
@@ -86,19 +84,26 @@ const onUploadComplete = async ({
           id: createdFile.id,
         },
       });
+      return;
     }
-    
+
+    // Create a new index for this PDF
     const client = new Pinecone({
       apiKey: process.env.PINECONE_API_KEY!,
     });
-    const pineconeIndex = client.Index('pdf');
+    const pineconeIndex = client.Index('pdfspeak');
 
     const embeddings = new OpenAIEmbeddings({
       openAIApiKey: process.env.OPENAI_API_KEY,
     });
+    console.log("Embeddings created", embeddings)
 
+    console.log("Page level docs", pageLevelDocs)
+
+    console.log("created file id", createdFile.id);
     await PineconeStore.fromDocuments(pageLevelDocs, embeddings, {
       pineconeIndex,
+      namespace: `${createdFile.id}`,
     });
 
     await db.file.update({
